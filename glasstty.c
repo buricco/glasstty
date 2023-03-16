@@ -184,7 +184,7 @@ static void paintchar (uint8_t x, uint8_t y, uint8_t c)
   uint8_t b, c9;
   
   b=font[cc+t];
-  c9=((csrx==x)&&(csry==y)&&(blink&1));
+  c9=((csrx==x)&&(csry==y)&&(blink<25));
   if (c9) b=255-b;
   if (c&0x80)
   {
@@ -316,13 +316,13 @@ int tty_keypoll (void)
 static unsigned tock (unsigned interval, void *timerid)
 {
  /* In case we are called before initialization is complete */
- if (!tty_alive) return interval+20;
+ if (!tty_alive) return 20;
 
  keypoll(); 
  if (!tty_alive) return 0; /* We got the axe. */
  refresh();
  
- return interval+20;
+ return 20;
 }
 
 static void tty_cr (void)
